@@ -3,24 +3,23 @@ import os
 sys.path.insert(0, os.path.dirname(__file__))
 
 import pytest
-from helper import register_new_courier_and_return_login_password
+from helpers.helper import generate_courier_data
 from api_methods.courier_api import CourierApi
-
-
-import pytest
-from helper import register_new_courier_and_return_login_password
-from api_methods.courier_api import CourierApi
-
 
 @pytest.fixture
 def new_courier():
-    login, password, _ = register_new_courier_and_return_login_password()
+    data = generate_courier_data()
+    CourierApi.create_courier(data)
 
-    yield login, password
+    login = data["login"]
+    password = data["password"]
 
-    
-    response = CourierApi.login_courier(login, password)
-    courier_id = response.json().get("id")
+    login_response = CourierApi.login_courier(login, password)
+    courier_id = None
 
+    if login_response.status_code == 200:
+        courier_id = login_response.json().get("id")
+
+    yield login, password 
     if courier_id:
         CourierApi.delete_courier(courier_id)

@@ -1,5 +1,4 @@
 import allure
-from helper import register_new_courier_and_return_login_password
 from api_methods.courier_api import CourierApi
 from data.data import ResponseMessages, ResponseFields
 

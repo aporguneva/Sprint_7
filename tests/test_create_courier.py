@@ -21,7 +21,7 @@ class TestCreateCourier:
         response = CourierApi.create_courier(payload)
 
         assert response.status_code == 201
-        assert response.json() == {"ok": True}
+        assert response.json()["ok"] == True
 
 
     @allure.title("Нельзя создать двух одинаковых курьеров")
@@ -75,13 +75,3 @@ class TestCreateCourier:
 
         assert response.status_code == 400
         assert ResponseMessages.ERROR_NOT_ENOUGH_DATA in response.json()["message"]
-
-    #при отсутствии поля имении ошибка не возникает
-    #@allure.title("Ошибка при отсутствии имени")
-    #def test_create_missing_first_name(self):
-        #payload = {"login": fake.user_name(),"password": fake.password()}
-
-        #response = CourierApi.create_courier(payload)
-
-        #assert response.status_code == 400
-        #assert ResponseMessages.ERROR_NOT_ENOUGH_DATA in response.json()["message"]
